@@ -205,7 +205,11 @@
             const keyInput = document.getElementById('key-input').value;
             const errorMessage = document.getElementById('error-message');
 
-            if (keyInput === validKeys.mainKey || keyInput === validKeys.secondaryKey) {
+            if (keyInput === validKeys.mainKey || 
+                keyInput === validKeys.secondaryKey ||
+                keyInput === validKeys.mainKey2 || 
+                keyInput === validKeys.mainKey3 ||
+                keyInput === validKeys.secondaryKey2) {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('main-container').style.display = 'flex';
             } else {
