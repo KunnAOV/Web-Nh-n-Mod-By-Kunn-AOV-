@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('BG.png'); /* Đường dẫn hình ảnh nền */
+            background-image: url('BG.png'); /* Nền tùy chỉnh */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -42,6 +42,10 @@
             height: 80px;
             border-radius: 50%; /* Bo tròn logo */
             margin-right: 10px;
+        }
+
+        .logo-container img:last-child {
+            margin-right: 0;
         }
 
         .logo-container span {
@@ -95,24 +99,45 @@
             margin-top: 10px;
         }
 
+        /* Hiệu ứng đèn LED chạy xung quanh viền */
+        @keyframes ledBorder {
+            0% {
+                border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
+            }
+            100% {
+                border-image: linear-gradient(405deg, red, orange, yellow, green, blue, indigo, violet) 1;
+            }
+        }
+
         .main-container {
             display: none;
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            margin: 10px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            background-color: #000; /* Nền đen cho nội dung bên trong */
             border-radius: 10px;
-            max-width: 400px;
-            margin: auto;
-            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 10px auto;
+            position: relative;
+            border: 5px solid transparent;
+            animation: ledBorder 3s linear infinite; /* Thêm animation */
         }
 
-        .main-container img {
+        .main-container .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px; /* Khoảng cách giữa các logo */
+            margin-bottom: 20px;
+        }
+
+        .main-container img.logo-clickable {
             width: 80px;
             height: 80px;
             border-radius: 50%; /* Bo tròn logo */
+            cursor: pointer;
         }
 
         .main-container a {
@@ -120,14 +145,25 @@
             width: 100%;
             padding: 10px;
             text-align: center;
-            color: white;
+            color: #ffffff; /* Màu chữ trắng cho các nút "Nhận" */
             border-radius: 5px;
             font-size: 16px;
-            background-color: #e1306c;
+            background-color: #007bff;
+            display: inline-block; /* Đảm bảo các nút "Nhận" hiển thị đúng */
+        }
+
+        .main-container a:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+            color: #ffffff; /* Màu chữ khi hover */
         }
 
         .main-container p {
             margin: 10px 0;
+            color: #f0f0f0; /* Thay đổi màu chữ của các thẻ p */
+        }
+
+        .main-container b {
+            color: #f0f0f0; /* Thay đổi màu chữ của các thẻ b */
         }
     </style>
 </head>
@@ -154,9 +190,13 @@
 
     <!-- Nội dung trang web -->
     <div id="main-container" class="main-container">
-        <img src="Logo.png" alt="Logo"> <!-- Đường dẫn tới logo -->
-        <p>____________________________________________________________</p>
-        <b>Kunn AOV</b>
+        <!-- Thêm hai logo với chức năng nhấn vào nằm cùng một hàng ngang -->
+        <div class="logo-row">
+            <img src="Logo.png" alt="Logo" class="logo-clickable" onclick="window.location.href='https://www.youtube.com/@kunn206';"> <!-- Logo đầu tiên -->
+            <img src="Logo2.png" alt="Logo2" class="logo-clickable" onclick="window.location.href='https://www.youtube.com/@Ban.to..';"> <!-- Logo thứ hai -->
+        </div>
+
+        <b>Kunn AOV × BAN TÔ MOD</b>
         <p>____________________________________________________________</p>
         <b>Tổng Hợp Pack Skin và Mod Chế</b>
         <p>____________________________________________________________</p>
