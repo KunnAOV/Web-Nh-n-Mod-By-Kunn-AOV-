@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Text Replacement Tool</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            background-color: #000;
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #container {
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        h1, h2 {
+            margin-top: 20px;
+            color: #fff;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="file"] {
+            padding: 8px;
+            width: calc(100% - 16px);
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #000;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+        #editorArea {
+            display: none;
+        }
+        #downloadButton {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div id="container">
+        <h2 style="color: #f8e71c; text-shadow: 0 0 10px rgba(248, 231, 28, 0.7);">-Web Mod Chữ Liên Quân-</h2>
+        <h2 style="color: #800000; text-shadow: 0 0 10px rgba(248, 231, 28, 0.7);">-KunnAOV-</h2>
+        <input type="file" id="txtFileInput" accept=".txt">
+        
+        <div id="editorArea">
+            <h3>Edit Text:</h3>
+            <div id="replaceInputs"></div>
+            <button id="saveChangesButton">Save Changes</button>
+        </div>
+        
+        <button id="downloadButton">Download Edited File</button>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ff9800"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#0000ff"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.6,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 4,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ff9800",
+                    "opacity": 0.5,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 7,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        const txtFileInput = document.getElementById('txtFileInput');
+        const editorArea = document.getElementById('editorArea');
+        const replaceInputs = document.getElementById('replaceInputs');
+        const saveChangesButton = document.getElementById('saveChangesButton');
+        const downloadButton = document.getElementById('downloadButton');
+        
+        const keywords = ['Chiến công đầu', ' Hạ', 'Double Kill', 'Triple Kill', 'Quad Kill', 'Mega Kill!', 'Truyền thuyết', 'Bá đạo', 'Thần thánh', 'Huyền thoại', 'Siêu việt', 'Chấm dứt!', 'Quét sạch', 'Kết nối lại', 'Rời trận', 'Kẻ địch đầu hàng', 'Phe ta đầu hàng', 'Lính siêu cấp đồng minh xuất chiến', 'Phá hết 3 đường, Lính siêu cấp đường giữa xuất hiện', 'Heptakill!', 'Hexakill!', 'Octakill!', 'Caesar tiên phong xuất kích', 'Trụ đối phương đã bị phá hủy', 'Trụ đồng minh đã bị phá hủy', 'Rồng bạo chúa Kraydus đã bị tiêu diệt', 'Tà thần Caesar đã bị tiêu diệt', 'Caesar bóng tối đã bị tiêu diệt', 'Rồng đã bị tiêu diệt', 'Rồng ánh sáng đã bị tiêu diệt', 'Caesar bạo chúa đã bị tiêu diệt', 'Caesar đã bị tiêu diệt', ''];  // List of keywords to replace
+        let originalContent = '';
+        let editedContent = '';
+
+        txtFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.txt')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalContent = e.target.result;
+
+                    // Clear existing input fields
+                    replaceInputs.innerHTML = '';
+
+                    // Create input fields for each keyword
+                    keywords.forEach((keyword, index) => {
+                        if (originalContent.includes(keyword)) {
+                            const inputGroup = document.createElement('div');
+                            inputGroup.className = 'input-group';
+                            inputGroup.innerHTML = `
+                                <label for="replaceText${index + 1}">${keyword}:</label>
+                                <input type="text" id="replaceText${index + 1}" placeholder="Replace ${keyword}">
+                            `;
+                            replaceInputs.appendChild(inputGroup);
+                        }
+                    });
+
+                    editorArea.style.display = 'block';
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        saveChangesButton.addEventListener('click', () => {
+            editedContent = originalContent;
+            keywords.forEach((keyword, index) => {
+                const inputField = document.getElementById(`replaceText${index + 1}`);
+                if (inputField && inputField.value.trim()) {
+                    const regex = new RegExp(keyword, 'g');
+                    editedContent = editedContent.replace(regex, inputField.value.trim());
+                }
+            });
+            downloadButton.style.display = 'block';
+        });
+
+        downloadButton.addEventListener('click', () => {
+            const zip = new JSZip();
+            const folder = zip.folder('Modchu_By_Kunn_AOV/files/Resources/1.55.1/Languages/VN_Garena_VN');
+            folder.file(txtFileInput.files[0].name, editedContent);
+
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(content);
+                downloadLink.download = 'Modchu_By_Kunn_AOV.zip';
+                downloadLink.click();
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+</body>
+</html>
