@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Chiến Game By Kunn AOV</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: -1;
+        }
+        #player {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #feb47b;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff7e5f;
+        }
+        #controls button {
+            background-color: #ff7e5f;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="player">
+        <h2 style="color: #f8e71c; text-shadow: 0 0 10px rgba(248, 231, 28, 0.7);">Nhạc Chiến Game</h2>
+        <h2 style="color: #800000; text-shadow: 0 0 10px rgba(248, 231, 28, 0.7);">KunnAOV</h2>
+        <p>Web Thử Nghiệm🌚</p>
+        <audio id="audio-player" controls>
+            <source id="audio-source" src="Nhac1.mp3" type="audio/mpeg">
+            Trình duyệt của bạn không hỗ trợ phần tử audio.
+        </audio>
+        <div id="controls">
+            <button onclick="previousTrack()">Trước</button>
+            <button onclick="togglePlay()">Phát/Tạm dừng</button>
+            <button onclick="nextTrack()">Tiếp theo</button>
+        </div>
+        <p id="current-time">00:00</p>
+        <p id="duration">00:00</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ff9800"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#0000ff"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.6,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 4,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ff9800",
+                    "opacity": 0.5,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 7,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        const audioPlayer = document.getElementById('audio-player');
+        const audioSource = document.getElementById('audio-source');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const durationDisplay = document.getElementById('duration');
+
+        const tracks = ['Dao_Hoa_Nac_1.mp3', 'Day_Bien×Tu_Cuu_Mon_Hoi_Uc_1.mp3', 'Fairy_tail.mp3', 'Gods.mp3', 'Khong_The_Do_Duoc_Luan_Hoi_1.mp3', 'Kiếp sau không chắc sẽ còn gặp được anh Remix 2023.mp3', 'Legend Never Die x Warriors.mp3', 'Mac_Van_Quy_Ky_1.mp3', 'Quẻ Bói.mp3', 'Tinh_Ve_1.mp3', 'Xich_Linh_1.mp3', 'Zella Day  East Of Eden  JAPANDEE REMIX.mp3', 'Đại Thiên Bồng Ver 2.mp3', 'EDM_tong_hop.mp3']; // Thay đổi đường dẫn bài hát
+        let currentTrackIndex = 0;
+
+        function changeTrack() {
+            audioSource.src = tracks[currentTrackIndex];
+            audioPlayer.load();
+            audioPlayer.play().catch(error => {
+                console.error('Không thể phát nhạc:', error);
+            });
+        }
+
+        audioPlayer.addEventListener('loadedmetadata', function() {
+            durationDisplay.textContent = formatTime(audioPlayer.duration);
+        });
+
+        audioPlayer.addEventListener('timeupdate', function() {
+            currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+        });
+
+        audioPlayer.addEventListener('ended', function() {
+            nextTrack();
+        });
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        }
+
+        function previousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            changeTrack();
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+            changeTrack();
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Automatically play the first track when the page loads
+        window.addEventListener('load', function() {
+            changeTrack(); // Load and play the first track
+        });
+    </script>
+</body>
+</html>
